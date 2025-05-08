@@ -1,0 +1,1 @@
+{"frames":[{"func":"ggplot(census_data, aes(x = median_monthly_home_cost, y = median_monthly_rent_cost, \n    color = social_wealth_class, size = social_wealth_class))","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error: object 'census_data' not found\n"}
