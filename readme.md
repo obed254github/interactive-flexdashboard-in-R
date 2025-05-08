@@ -19,7 +19,7 @@ This interactive dashboard, built using **R**, **Shiny**, and **Flexdashboard**,
   [Link](https://raw.githubusercontent.com/dilernia/STA418-518/main/Data/census_data_state_2008-2023.csv)
 
 - Presidential Elections Data:  
-  `countypres_2000-2020.csv` (uploaded to repository or read locally)
+  `data/countypres_2000-2020.csv` (uploaded to repository or read locally)
 
 ---
 
@@ -29,8 +29,45 @@ This interactive dashboard, built using **R**, **Shiny**, and **Flexdashboard**,
 - **Flexdashboard** for layout
 - **Shiny** for interactivity
 - **Packages**:  
-  `tidyverse`, `ggplot2`, `plotly`, `lubridate`, `skimr`, `mice`, `naniar`, `gt`, `gtExtras`, `maps`, `scales`, `magick`, `grid`, `flextable`
+  `tidyverse`, `ggplot2`, `plotly`, `lubridate`, `mice`, `naniar`, `maps`, `scales`, `magick`, `grid`
 
+---
+## Vizualisations
+
+### Scatterplot
+```r
+#scatterplot of homecost vs rent.
+m <- ggplot(
+  census_data,
+  aes(
+    x = median_monthly_home_cost,
+    y = median_monthly_rent_cost,
+    color = social_wealth_class,
+    size = social_wealth_class
+  )
+) +
+  geom_point(alpha = 0.3) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(
+    x = "Median monthly home cost ($)",
+    y = "Median monthly rent cost ($)",
+    caption = "Data Source: TidyCensus & US Census Bureau"
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+ggplotly(m, tooltip = c("x", "y", "color", "size")) |>
+  layout(
+    legend = list(
+      title = list(
+        text = "Wealth Class"),
+      orientation = "h",
+      x = 0.7,
+      xanchor = "right",
+      y = -0.5
+    )
+  )
+```
 ---
 
 ## 📦 Installation and Deployment
@@ -60,15 +97,11 @@ rmarkdown::render("dashboard.Rmd")
 
 ---
 
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
 ## 👤 Author
 
 **Obadiah Kiptoo**  
-_MSc in Data Science and Analytics | Applied Statistics graduate | Passionate about data visualization and policy insights_
+\_MSc in Data Science and Analytics, Grand Valley State University | Applied Statistics graduate, Moi University, Kenya | Passionate about data analysis, visualization and Machine Learning
 
 For inquiries or collaboration, feel free to reach out!
+
+**email**: Obadiahkiptoo1998@gmail.com
