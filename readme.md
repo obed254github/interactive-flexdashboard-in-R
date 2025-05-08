@@ -68,6 +68,44 @@ ggplotly(m, tooltip = c("x", "y", "color", "size")) |>
     )
   )
 ```
+### Bar plot
+```{r}
+bar_plot <- census_data |> 
+  group_by(county_state) |> 
+  summarize(
+    average_monthly_home_cost = mean(median_monthly_home_cost, na.rm = TRUE),
+    average_monthly_rent = mean(median_monthly_rent_cost, na.rm = TRUE)
+  ) |> 
+  ungroup() |> 
+  arrange(desc(average_monthly_home_cost)) |> 
+  slice_head(n = 10) |> 
+  pivot_longer(
+    cols = c(average_monthly_home_cost, average_monthly_rent),
+    names_to = "cost_type",
+    values_to = "value"
+  ) |> 
+  mutate(county_state = factor(county_state, levels = unique(county_state)))|>
+  ggplot( aes(x = county_state, y = value, fill = cost_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  labs(
+    x = "State",
+    y = "Average monthly cost ($)",
+    caption = "Data source: TidyCensus R & United States Census website"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+ggplotly(bar_plot, tooltip = c("x", "y", "fill")) |>
+  layout(
+    legend = list(
+      title = list(
+        text = "Wealth Class"))
+  )
+```
 ---
 
 ## 📦 Installation and Deployment
