@@ -19,7 +19,7 @@ This interactive dashboard, built using **R**, **Shiny**, and **Flexdashboard**,
   [Link](https://raw.githubusercontent.com/dilernia/STA418-518/main/Data/census_data_state_2008-2023.csv)
 
 - Presidential Elections Data:  
-  `data/countypres_2000-2020.csv` (uploaded to repository or read locally)
+  `data/countypres_2000-2020.csv` (whch is uploaded to repository)
 
 ---
 
@@ -31,81 +31,7 @@ This interactive dashboard, built using **R**, **Shiny**, and **Flexdashboard**,
 - **Packages**:  
   `tidyverse`, `ggplot2`, `plotly`, `lubridate`, `mice`, `naniar`, `maps`, `scales`, `magick`, `grid`
 
----
-## Vizualisations
 
-### Scatterplot
-```r
-#scatterplot of homecost vs rent.
-m <- ggplot(
-  census_data,
-  aes(
-    x = median_monthly_home_cost,
-    y = median_monthly_rent_cost,
-    color = social_wealth_class,
-    size = social_wealth_class
-  )
-) +
-  geom_point(alpha = 0.3) +
-  scale_fill_brewer(palette = "Set1") +
-  labs(
-    x = "Median monthly home cost ($)",
-    y = "Median monthly rent cost ($)",
-    caption = "Data Source: TidyCensus & US Census Bureau"
-  ) +
-  theme_bw() +
-  theme(legend.position = "bottom")
-
-ggplotly(m, tooltip = c("x", "y", "color", "size")) |>
-  layout(
-    legend = list(
-      title = list(
-        text = "Wealth Class"),
-      orientation = "h",
-      x = 0.7,
-      xanchor = "right",
-      y = -0.5
-    )
-  )
-```
-### Bar plot
-```{r}
-bar_plot <- census_data |> 
-  group_by(county_state) |> 
-  summarize(
-    average_monthly_home_cost = mean(median_monthly_home_cost, na.rm = TRUE),
-    average_monthly_rent = mean(median_monthly_rent_cost, na.rm = TRUE)
-  ) |> 
-  ungroup() |> 
-  arrange(desc(average_monthly_home_cost)) |> 
-  slice_head(n = 10) |> 
-  pivot_longer(
-    cols = c(average_monthly_home_cost, average_monthly_rent),
-    names_to = "cost_type",
-    values_to = "value"
-  ) |> 
-  mutate(county_state = factor(county_state, levels = unique(county_state)))|>
-  ggplot( aes(x = county_state, y = value, fill = cost_type)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_viridis_d() +
-  labs(
-    x = "State",
-    y = "Average monthly cost ($)",
-    caption = "Data source: TidyCensus R & United States Census website"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
-
-ggplotly(bar_plot, tooltip = c("x", "y", "fill")) |>
-  layout(
-    legend = list(
-      title = list(
-        text = "Wealth Class"))
-  )
-```
 ---
 
 ## 📦 Installation and Deployment
